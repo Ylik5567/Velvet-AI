@@ -22,7 +22,7 @@ body {
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(12px);
-  background: rgba(20,20,20,0.5); /* полупрозрачный фон */
+  background: rgba(20,20,20,0.5);
   color: #fff;
 }
 
@@ -46,26 +46,24 @@ body {
   flex-direction: column;
 }
 
-.msg-user {
-  background: rgba(255,255,255,0.15);
+.msg-user, .msg-ai {
   padding: 10px 14px;
   border-radius: 16px;
   margin: 6px 0;
   max-width: 70%;
+  animation: fadeInUp 0.4s ease;
+}
+
+.msg-user {
+  background: rgba(255,255,255,0.15);
   align-self: flex-end;
-  color: #fff; /* белый текст */
-  backdrop-filter: blur(6px);
+  color: #fff;
 }
 
 .msg-ai {
   background: rgba(255,255,255,0.1);
-  padding: 10px 14px;
-  border-radius: 16px;
-  margin: 6px 0;
-  max-width: 70%;
   align-self: flex-start;
-  color: #ddd; /* светло-серый текст */
-  backdrop-filter: blur(6px);
+  color: #ddd;
 }
 
 /* Поле ввода */
@@ -100,6 +98,33 @@ body {
 #sendBtn:hover {
   background: #0077b3;
 }
+
+/* Анимация появления */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Индикатор "думаю" */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  align-self: flex-start;
+  color: #ccc;
+}
+
+.typing-indicator img {
+  width: 30px;
+  height: 30px;
+  animation: spin 1.2s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 </style>
 </head>
 <body>
@@ -119,7 +144,6 @@ const sendBtn = document.getElementById("sendBtn");
 const chatInput = document.getElementById("chatInput");
 const messages = document.getElementById("messages");
 
-// функция отправки
 async function sendMessage() {
   const text = chatInput.value.trim();
   if (!text) return;
@@ -132,9 +156,20 @@ async function sendMessage() {
 
   chatInput.value = "";
 
+  // индикатор "думаю"
+  const typing = document.createElement("div");
+  typing.className = "typing-indicator";
+  typing.innerHTML = `<img src="your.png" alt="thinking"><span>Velvet думает...</span>`;
+  messages.appendChild(typing);
+  messages.scrollTop = messages.scrollHeight;
+
   try {
-    // ответ Velvet AI через Puter
     const result = await puter.ai.chat(text);
+
+    // убрать индикатор
+    typing.remove();
+
+    // ответ Velvet
     const aiMsg = document.createElement("div");
     aiMsg.className = "msg-ai";
     aiMsg.textContent = result;
@@ -143,6 +178,7 @@ async function sendMessage() {
     messages.scrollTop = messages.scrollHeight;
   } catch (err) {
     console.error(err);
+    typing.remove();
   }
 }
 
