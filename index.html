@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Velvet Chat</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #e5ddd5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.chat-container {
+  width: 400px;
+  height: 600px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.chat-header {
+  background: #0088cc;
+  color: #fff;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-user {
+  background: #dcf8c6;
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin: 5px 0;
+  max-width: 70%;
+  align-self: flex-end;
+}
+
+.msg-ai {
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin: 5px 0;
+  max-width: 70%;
+  align-self: flex-start;
+  border: 1px solid #ddd;
+}
+
+.chat-input-area {
+  display: flex;
+  padding: 10px;
+  background: #f0f0f0;
+}
+
+#chatInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+#sendBtn {
+  background: #0088cc;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 18px;
+}
+#sendBtn:hover {
+  background: #0077b3;
+}
+</style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">Velvet AI</div>
+  <div id="messages" class="chat-messages"></div>
+  <div class="chat-input-area">
+    <input id="chatInput" type="text" placeholder="Введите сообщение...">
+    <button id="sendBtn">➤</button>
+  </div>
+</div>
+
+<script src="https://js.puter.com/v2/"></script>
+<script>
+const sendBtn = document.getElementById("sendBtn");
+const chatInput = document.getElementById("chatInput");
+const messages = document.getElementById("messages");
+
+// отправка сообщения
+sendBtn.onclick = async () => {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  // сообщение пользователя
+  const userMsg = document.createElement("div");
+  userMsg.className = "msg-user";
+  userMsg.textContent = text;
+  messages.appendChild(userMsg);
+
+  chatInput.value = "";
+
+  try {
+    // ответ Velvet AI через Puter
+    const result = await puter.ai.chat(text);
+    const aiMsg = document.createElement("div");
+    aiMsg.className = "msg-ai";
+    aiMsg.textContent = result;
+    messages.appendChild(aiMsg);
+
+    messages.scrollTop = messages.scrollHeight;
+  } catch (err) {
+    console.error(err);
+  }
+};
+</script>
+</body>
+</html>
