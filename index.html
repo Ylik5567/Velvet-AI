@@ -7,88 +7,97 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #e5ddd5;
+  background: url("ggg.png") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
+/* Контейнер чата */
 .chat-container {
-  width: 400px;
-  height: 600px;
-  background: #fff;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
-  overflow: hidden;
+  backdrop-filter: blur(12px);
+  background: rgba(20,20,20,0.6); /* полупрозрачный тёмный фон */
+  color: #fff;
 }
 
+/* Заголовок */
 .chat-header {
-  background: #0088cc;
-  color: #fff;
+  background: rgba(0,0,0,0.4);
   padding: 15px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+/* Сообщения */
 .chat-messages {
   flex: 1;
-  padding: 10px;
+  padding: 20px;
   overflow-y: auto;
-  background: #f9f9f9;
   display: flex;
   flex-direction: column;
 }
 
 .msg-user {
-  background: #dcf8c6;
-  padding: 8px 12px;
-  border-radius: 12px;
-  margin: 5px 0;
+  background: rgba(237,147,234,0.2);
+  padding: 10px 14px;
+  border-radius: 16px;
+  margin: 6px 0;
   max-width: 70%;
   align-self: flex-end;
+  color: #ED93EA;
+  backdrop-filter: blur(6px);
 }
 
 .msg-ai {
-  background: #fff;
-  padding: 8px 12px;
-  border-radius: 12px;
-  margin: 5px 0;
+  background: rgba(53,101,139,0.2);
+  padding: 10px 14px;
+  border-radius: 16px;
+  margin: 6px 0;
   max-width: 70%;
   align-self: flex-start;
-  border: 1px solid #ddd;
+  color: #35658B;
+  backdrop-filter: blur(6px);
 }
 
+/* Поле ввода */
 .chat-input-area {
   display: flex;
-  padding: 10px;
-  background: #f0f0f0;
+  padding: 15px;
+  background: rgba(0,0,0,0.4);
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 #chatInput {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   border-radius: 20px;
-  border: 1px solid #ccc;
+  border: none;
   outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
 }
 
 #sendBtn {
-  background: #0088cc;
+  background: #ED93EA;
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   margin-left: 10px;
   cursor: pointer;
   font-size: 18px;
 }
 #sendBtn:hover {
-  background: #0077b3;
+  background: #d46fd2;
 }
 </style>
 </head>
@@ -109,8 +118,8 @@ const sendBtn = document.getElementById("sendBtn");
 const chatInput = document.getElementById("chatInput");
 const messages = document.getElementById("messages");
 
-// отправка сообщения
-sendBtn.onclick = async () => {
+// функция отправки
+async function sendMessage() {
   const text = chatInput.value.trim();
   if (!text) return;
 
@@ -134,7 +143,18 @@ sendBtn.onclick = async () => {
   } catch (err) {
     console.error(err);
   }
-};
+}
+
+// отправка по кнопке
+sendBtn.onclick = sendMessage;
+
+// отправка по Enter
+chatInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
 </script>
 </body>
 </html>
