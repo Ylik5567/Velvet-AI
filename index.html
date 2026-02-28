@@ -22,7 +22,7 @@ body {
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(12px);
-  background: rgba(20,20,20,0.6); /* полупрозрачный тёмный фон */
+  background: rgba(20,20,20,0.5); /* полупрозрачный фон */
   color: #fff;
 }
 
@@ -34,6 +34,7 @@ body {
   font-weight: bold;
   text-align: center;
   border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
 }
 
 /* Сообщения */
@@ -46,24 +47,24 @@ body {
 }
 
 .msg-user {
-  background: rgba(237,147,234,0.2);
+  background: rgba(255,255,255,0.15);
   padding: 10px 14px;
   border-radius: 16px;
   margin: 6px 0;
   max-width: 70%;
   align-self: flex-end;
-  color: #ED93EA;
+  color: #fff; /* белый текст */
   backdrop-filter: blur(6px);
 }
 
 .msg-ai {
-  background: rgba(53,101,139,0.2);
+  background: rgba(255,255,255,0.1);
   padding: 10px 14px;
   border-radius: 16px;
   margin: 6px 0;
   max-width: 70%;
   align-self: flex-start;
-  color: #35658B;
+  color: #ddd; /* светло-серый текст */
   backdrop-filter: blur(6px);
 }
 
@@ -86,7 +87,7 @@ body {
 }
 
 #sendBtn {
-  background: #ED93EA;
+  background: #0088cc;
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -97,7 +98,7 @@ body {
   font-size: 18px;
 }
 #sendBtn:hover {
-  background: #d46fd2;
+  background: #0077b3;
 }
 </style>
 </head>
