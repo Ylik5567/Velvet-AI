@@ -27,7 +27,7 @@ body {
 .chat-container {
   width: 100%;
   height: 100%;
-  display: none; /* скрыт до авторизации */
+  display: flex;
   flex-direction: column;
   backdrop-filter: blur(12px);
   background: rgba(20,20,20,0.5);
@@ -137,7 +137,7 @@ body {
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.6);
   backdrop-filter: blur(8px); 
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 3000;
@@ -187,7 +187,7 @@ body {
   </div>
 </div>
 
-<div class="chat-container">
+<div class="chat-container" style="display:none;">
   <div class="chat-header">Velvet AI</div>
   <div id="messages" class="chat-messages"></div>
   <div class="chat-input-area">
@@ -202,69 +202,6 @@ const sendBtn = document.getElementById("sendBtn");
 const chatInput = document.getElementById("chatInput");
 const messages = document.getElementById("messages");
 const introVideo = document.getElementById("introVideo");
-
-async function sendMessage() {
-  const text = chatInput.value.trim();
-  if (!text) return;
-
-  const userMsg = document.createElement("div");
-  userMsg.className = "msg-user";
-  userMsg.textContent = text;
-  messages.appendChild(userMsg);
-
-  chatInput.value = "";
-
-  const typing = document.createElement("div");
-  typing.className = "typing-indicator";
-  typing.innerHTML = `<img src="your.png" alt="thinking"><span>Velvet думает...</span>`;
-  messages.appendChild(typing);
-  messages.scrollTop = messages.scrollHeight;
-
-  try {
-    const result = await puter.ai.chat(text);
-
-    typing.remove();
-
-    const aiMsg = document.createElement("div");
-    aiMsg.className = "msg-ai";
-    aiMsg.textContent = result;
-    messages.appendChild(aiMsg);
-
-    messages.scrollTop = messages.scrollHeight;
-  } catch (err) {
-    console.error(err);
-    typing.remove();
-  }
-}
-
-sendBtn.onclick = sendMessage;
-
-chatInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-
-async function signIn() {
-  try {
-    await puter.auth.signIn();
-    document.getElementById("authModal").style.display = "none";
-    document.querySelector(".chat-container").style.display = "flex";
-  } catch (err) {
-    console.error("Ошибка входа:", err);
-  }
-}
-
-window.onload = async () => {
-  const user = await puter.auth.getUser();
-  if (!user) {
-    document.getElementById("authModal").style.display = "flex";
-  } else {
-    document.getElementById("authModal").style.display = "none";
-    document.querySelector(".chat-container").style.display = "flex";
-  }
-};
 
 // плавное исчезновение видео за 2 секунды до конца
 introVideo.addEventListener("timeupdate", () => {
