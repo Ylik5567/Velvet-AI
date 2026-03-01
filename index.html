@@ -20,14 +20,14 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 2000;
+  z-index: 99999; /* выше всего */
 }
 
 /* Контейнер чата */
 .chat-container {
   width: 100%;
   height: 100%;
-  display: flex;
+  display: none;
   flex-direction: column;
   backdrop-filter: blur(12px);
   background: rgba(20,20,20,0.5);
@@ -137,7 +137,7 @@ body {
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.6);
   backdrop-filter: blur(8px); 
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   z-index: 3000;
@@ -175,7 +175,7 @@ body {
 </head>
 <body>
 
-<video id="introVideo" autoplay muted playsinline>
+<video id="introVideo" autoplay playsinline>
   <source src="intro.mp4" type="video/mp4">
 </video>
 
@@ -187,7 +187,7 @@ body {
   </div>
 </div>
 
-<div class="chat-container" style="display:none;">
+<div class="chat-container">
   <div class="chat-header">Velvet AI</div>
   <div id="messages" class="chat-messages"></div>
   <div class="chat-input-area">
@@ -268,10 +268,16 @@ window.onload = async () => {
 
 // плавное исчезновение видео за 2 секунды до конца
 introVideo.addEventListener("timeupdate", () => {
-  if (introVideo.duration - introVideo.currentTime <= 2) {
+  if (introVideo.duration && introVideo.duration - introVideo.currentTime <= 2) {
     introVideo.style.transition = "opacity 2s linear";
     introVideo.style.opacity = "0";
   }
+});
+
+// после окончания видео показываем модалку регистрации
+introVideo.addEventListener("ended", () => {
+  introVideo.style.display = "none";
+  document.getElementById("authModal").style.display = "flex";
 });
 </script>
 </body>
