@@ -10,11 +10,20 @@ body {
   background: url("ggg.png") no-repeat center center fixed;
   background-size: cover;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
 }
 
+/* Видео поверх всего */
+#introVideo {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2000;
+}
+
+/* Контейнер чата */
 .chat-container {
   width: 100%;
   height: 100%;
@@ -23,6 +32,8 @@ body {
   backdrop-filter: blur(12px);
   background: rgba(20,20,20,0.5);
   color: #fff;
+  position: relative;
+  z-index: 100;
 }
 
 .chat-header {
@@ -129,7 +140,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 3000;
 }
 .modal-content {
   background: rgba(20,20,20,0.9);
@@ -164,6 +175,10 @@ body {
 </head>
 <body>
 
+<video id="introVideo" autoplay muted playsinline>
+  <source src="intro.mp4" type="video/mp4">
+</video>
+
 <div id="authModal" class="modal">
   <div class="modal-content">
     <h2>Авторизация обязательна</h2>
@@ -186,13 +201,7 @@ body {
 const sendBtn = document.getElementById("sendBtn");
 const chatInput = document.getElementById("chatInput");
 const messages = document.getElementById("messages");
-
-let rulesText = "";
-
-fetch("Gagaga.txt")
-  .then(res => res.text())
-  .then(text => { rulesText = text; })
-  .catch(err => console.error("Не удалось загрузить правила:", err));
+const introVideo = document.getElementById("introVideo");
 
 async function sendMessage() {
   const text = chatInput.value.trim();
@@ -212,8 +221,7 @@ async function sendMessage() {
   messages.scrollTop = messages.scrollHeight;
 
   try {
-    const prompt = rulesText + "\n\nПользователь: " + text;
-    const result = await puter.ai.chat(prompt);
+    const result = await puter.ai.chat(text);
 
     typing.remove();
 
@@ -257,6 +265,14 @@ window.onload = async () => {
     document.querySelector(".chat-container").style.display = "flex";
   }
 };
+
+// плавное исчезновение видео за 2 секунды до конца
+introVideo.addEventListener("timeupdate", () => {
+  if (introVideo.duration - introVideo.currentTime <= 2) {
+    introVideo.style.transition = "opacity 2s linear";
+    introVideo.style.opacity = "0";
+  }
+});
 </script>
 </body>
 </html>
